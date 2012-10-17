@@ -38,8 +38,25 @@ Essentially all integrations can be boiled down to these common components. Defi
 
 It is easiest to think of each of these components as a "service" that Spiceworks is providing as part of its platform. Simply put, given the base parameters of each component, Spiceworks should be able to do everything else for the integration author, each step not needing to be enumerated. So each of these components have their own definition API that takes a certain set of parameters, and will generate capabilities throughout the user's installation. 
 
-For instance, creating a Data Storage Service (in this case called a 'model') only requires that the author name the object, and provide its attributes and attribute types. No tables need to be manually created. Having this service defined in the plug-in will also allow users to create Reports on these objects automatically. An example of creating a "model" for storing information about a cloud-hosted e-mail inbox could be as follows (as a Javascript API call):
+For instance, creating a Data Storage Service (in this case called a 'model') only requires that the author name the object, and provide its attributes and attribute types. No tables need to be manually created. Having this service defined in the plug-in will also allow users to create Reports on these objects automatically. An example of creating a "model" for storing information about a cloud-hosted e-mail inbox could be as follows (as a Javascript API call, assuming jQuery):
 
 <pre>
-This is code
+var cloudMailboxStorageService = plugin.services.model({
+   name: 'CloudMailbox',
+   columns: {
+     'email_address': 'string',
+     'total_size_in_bytes': 'integer'
+     'used_size_in_bytes': 'integer'
+     'last_login': 'datetime'
+   },
+   uniqueNameColumn: 'email_address'
+});
+
+// the returned service object provides async callbacks to query and manipulate data.
+// these APIs are unique for each type of service.
+cloudMailboxStorageService.all( function(mailboxes) {
+  $.each(mailboxes, function(mb) {
+    alert("The mailbox " + mb['email_address'] + " is " + (mb['used_size_in_bytes'] / mb['total_size_in_bytes']) + " percent full.");
+  });
+});
 </pre>

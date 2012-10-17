@@ -33,3 +33,13 @@ Any service provider that wants to build an integrated application within Spicew
 5. UI and module integration (tickets, purchases, etc)
 
 Essentially all integrations can be boiled down to these common components. Defining the parameters and behaviors of these components is then all that is necessary to build a functional integration.
+
+### Plugin Service Architecture
+
+It is easiest to think of each of these components as a "service" that Spiceworks is providing as part of its platform. Simply put, given the base parameters of each component, Spiceworks should be able to do everything else for the integration author, each step not needing to be enumerated. So each of these components have their own definition API that takes a certain set of parameters, and will generate capabilities throughout the user's installation. 
+
+For instance, creating a Data Storage Service (in this case called a 'model') only requires that the author name the object, and provide its attributes and attribute types. No tables need to be manually created. Having this service defined in the plug-in will also allow users to create Reports on these objects automatically. An example of creating a "model" for storing information about a cloud-hosted e-mail inbox could be as follows (as a Javascript API call):
+
+<pre>
+This is code
+</pre>

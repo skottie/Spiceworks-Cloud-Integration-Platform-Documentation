@@ -56,7 +56,20 @@ var cloudMailboxStorageService = plugin.services.model({
 // these APIs are unique for each type of service.
 cloudMailboxStorageService.all( function(mailboxes) {
   $.each(mailboxes, function(mb) {
-    alert("The mailbox " + mb['email_address'] + " is " + (mb['used_size_in_bytes'] / mb['total_size_in_bytes']) + " percent full.");
+    var percentFull = mb['used_size_in_bytes'] / mb['total_size_in_bytes'];
+    alert("The mailbox " + mb['email_address'] + " is " + percentFull + " percent full.");
   });
 });
 </pre>
+
+In the above example, the integration author defines a model service to store objects called 'CloudMailbox' with the attributes email_address, total_size_in_bytes, used_size_in_bytes, and last_login. In this particular case, objects need to have a unique ID, which for this example email_address would work.
+
+Once the service is created, the object returned from the API call represents access to that service. This object holds APIs that pertain to that service, and will be different for each type of service created. For instance, all model (data storage) services have the following APIs: all(), find(), get(), and create(), while a DataSource service has collect(), schedule(), and unschedule().
+
+Each one of these services are documented fully and separately in other files you will find in this repository.
+
+### Loosely Coupled Collaboration
+
+To increase the extensibility of the platform, each service usually does one set of highly-cohesive operations, which can be fully leveraged when used in conjunction with other defined plug-in services. For instance, in the example above we have the ability to storage and report on CloudMailboxes. We could then create a monitor service that watches the CloudMailbox model service for new mailboxes or low mailbox space to create alerts. We could also create a DataSource service that connects to an external API which can populate all CloudMailboxes for a given account automatically, without having to enter them in manually.
+
+In the end, a Cloud Integration will have a handful of defined services to authenticate with an external storage provider, store, monitor, and report on business-object level data, connect this storage to an external data-source, and add additional UI elements to the Spiceworks application to provide a seamless experience for the end user.
